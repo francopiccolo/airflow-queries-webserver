@@ -1,15 +1,21 @@
-CREATE TABLE IF NOT EXISTS events (
-    event               VARCHAR(10),
+DROP TABLE IF EXISTS events_stg;
+CREATE TABLE IF NOT EXISTS events_stg (
+    event               VARCHAR(50),
     time                TIMESTAMP,
-    unique_visitor_id   VARCHAR(100),
-    ha_user_id          VARCHAR(100),
-    browser             VARCHAR(10),
-    os                  VARCHAR(10),
-    country_code        VARCHAR(10)
+    unique_visitor_id   VARCHAR(200),
+    ha_user_id          VARCHAR(50),
+    browser             VARCHAR(50),
+    os                  VARCHAR(50),
+    country_code        VARCHAR(50)
 );
 
-COPY events
-FROM '/usr/local/airflow/dags/data/events/{{ execution_date }}.csv';
-
-
-
+DROP TABLE IF EXISTS events;
+CREATE TABLE IF NOT EXISTS events (
+    event               VARCHAR(50),
+    time                TIMESTAMP,
+    unique_visitor_id   VARCHAR(200),
+    ha_user_id          VARCHAR(50),
+    browser             VARCHAR(50),
+    os                  VARCHAR(50),
+    country_code        VARCHAR(50)
+);
