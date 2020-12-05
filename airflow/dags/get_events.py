@@ -35,7 +35,7 @@ def insert_events(**kwargs):
     params = {'time_from': execution_time_str,
               'time_to': next_execution_time_str}
 
-    events = requests.get('http://flask:5000/events', params)
+    events = requests.get('http://nginx:80/events', params)
     print(events.json())
 
     pg_hook = PostgresHook(postgres_conn_id='pg_dw')

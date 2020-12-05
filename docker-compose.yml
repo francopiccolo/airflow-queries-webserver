@@ -5,17 +5,15 @@ services:
     container_name: flask
     build: ./flask
     restart: always
-    ports:
-      - '5000:5000'
 
-#  nginx:
-#    build: ./nginx
-#    container_name: nginx
-#    restart: always
-#    ports:
-#      - "80:80"
-#    depends_on:
-#      - flask
+  nginx:
+    build: ./nginx
+    container_name: nginx
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - flask
 
   pg_dw:
       container_name: pg_dw
