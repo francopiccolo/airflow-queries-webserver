@@ -1,0 +1,56 @@
+version: '3.7'
+
+services:
+  flask:
+    container_name: flask
+    build: ./flask
+    restart: always
+    ports:
+      - '5000:5000'
+
+#  nginx:
+#    build: ./nginx
+#    container_name: nginx
+#    restart: always
+#    ports:
+#      - "80:80"
+#    depends_on:
+#      - flask
+
+  pg_dw:
+      container_name: pg_dw
+      image: postgres:9.6
+      environment:
+          - POSTGRES_USER=airflow
+          - POSTGRES_PASSWORD=airflow
+          - POSTGRES_DB=airflow
+
+  postgres:
+      container_name: pg_airflow
+      image: postgres:9.6
+      environment:
+          - POSTGRES_USER=airflow
+          - POSTGRES_PASSWORD=airflow
+          - POSTGRES_DB=airflow
+
+  webserver:
+      container_name: airflow
+      image: puckel/docker-airflow # https://github.com/puckel/docker-airflow/
+      restart: always
+      depends_on:
+          - postgres
+          - flask
+          - pg_dw
+      environment:
+          - LOAD_EX=n
+          - EXECUTOR=Local
+      volumes:
+          - ./airflow/dags:/usr/local/airflow/dags
+          - ./airflow/airflow.cfg:/usr/local/airflow/airflow.cfg
+      ports:
+          - "8080:8080"
+      healthcheck:
+          test: ["CMD-SHELL", "[ -f /usr/local/airflow/airflow-webserver.pid ]"]
+          interval: 30s
+          timeout: 30s
+          retries: 3
